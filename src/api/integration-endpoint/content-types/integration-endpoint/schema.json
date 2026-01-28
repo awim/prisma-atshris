@@ -1,0 +1,74 @@
+{
+  "kind": "collectionType",
+  "collectionName": "integration_endpoints",
+  "info": {
+    "singularName": "integration-endpoint",
+    "pluralName": "integration-endpoints",
+    "displayName": "Integration Endpoint"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "systemName": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "protocol": {
+      "type": "string",
+      "default": "https",
+      "required": true
+    },
+    "baseUrl": {
+      "type": "string",
+      "required": true
+    },
+    "port": {
+      "type": "string"
+    },
+    "method": {
+      "type": "string"
+    },
+    "endpointDirection": {
+      "type": "enumeration",
+      "required": true,
+      "default": "inbound",
+      "enum": [
+        "inbound",
+        "outbound",
+        "bidirectional"
+      ]
+    },
+    "contextPath": {
+      "type": "string"
+    },
+    "retryPolicy": {
+      "type": "integer",
+      "required": true,
+      "default": 5,
+      "min": 0,
+      "max": 20
+    },
+    "rateLimit": {
+      "type": "biginteger",
+      "min": "0"
+    },
+    "timeout": {
+      "type": "integer",
+      "min": 0
+    },
+    "isActive": {
+      "type": "boolean",
+      "required": false,
+      "default": true
+    },
+    "inboundRequests": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::inbound-request.inbound-request",
+      "mappedBy": "integrationEndpoint"
+    }
+  }
+}

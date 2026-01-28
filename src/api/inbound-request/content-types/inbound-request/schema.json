@@ -1,0 +1,45 @@
+{
+  "kind": "collectionType",
+  "collectionName": "inbound_requests",
+  "info": {
+    "singularName": "inbound-request",
+    "pluralName": "inbound-requests",
+    "displayName": "Inbound Request"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "requestHeader": {
+      "type": "text"
+    },
+    "payload": {
+      "type": "text"
+    },
+    "requestReferer": {
+      "type": "string"
+    },
+    "integrationEndpoint": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::integration-endpoint.integration-endpoint",
+      "inversedBy": "inboundRequests"
+    },
+    "payloadFilePath": {
+      "type": "string"
+    },
+    "processedAt": {
+      "type": "datetime"
+    },
+    "requestStatus": {
+      "type": "enumeration",
+      "enum": [
+        "received",
+        "successSubmitted",
+        "failedSubmitted",
+        "aborted"
+      ]
+    }
+  }
+}

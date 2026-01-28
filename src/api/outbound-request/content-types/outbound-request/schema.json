@@ -1,0 +1,45 @@
+{
+  "kind": "collectionType",
+  "collectionName": "outbound_requests",
+  "info": {
+    "singularName": "outbound-request",
+    "pluralName": "outbound-requests",
+    "displayName": "Outbound Request"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "requestHeader": {
+      "type": "text"
+    },
+    "payload": {
+      "type": "text"
+    },
+    "retryAttempts": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "responseStatus": {
+      "type": "enumeration",
+      "enum": [
+        "success",
+        "failed"
+      ]
+    },
+    "responStatusCode": {
+      "type": "string"
+    },
+    "responseMessage": {
+      "type": "text"
+    },
+    "firstAttemptAt": {
+      "type": "datetime"
+    },
+    "lastAttemptAt": {
+      "type": "datetime"
+    }
+  }
+}

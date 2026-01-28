@@ -595,6 +595,161 @@ export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiInboundRequestInboundRequest
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'inbound_requests';
+  info: {
+    displayName: 'Inbound Request';
+    pluralName: 'inbound-requests';
+    singularName: 'inbound-request';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    integrationEndpoint: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::integration-endpoint.integration-endpoint'
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::inbound-request.inbound-request'
+    > &
+      Schema.Attribute.Private;
+    payload: Schema.Attribute.Text;
+    payloadFilePath: Schema.Attribute.String;
+    processedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    requestHeader: Schema.Attribute.Text;
+    requestReferer: Schema.Attribute.String;
+    requestStatus: Schema.Attribute.Enumeration<
+      ['received', 'successSubmitted', 'failedSubmitted', 'aborted']
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiIntegrationEndpointIntegrationEndpoint
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'integration_endpoints';
+  info: {
+    displayName: 'Integration Endpoint';
+    pluralName: 'integration-endpoints';
+    singularName: 'integration-endpoint';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    baseUrl: Schema.Attribute.String & Schema.Attribute.Required;
+    contextPath: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    endpointDirection: Schema.Attribute.Enumeration<
+      ['inbound', 'outbound', 'bidirectional']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'inbound'>;
+    inboundRequests: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::inbound-request.inbound-request'
+    >;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::integration-endpoint.integration-endpoint'
+    > &
+      Schema.Attribute.Private;
+    method: Schema.Attribute.String;
+    port: Schema.Attribute.String;
+    protocol: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'https'>;
+    publishedAt: Schema.Attribute.DateTime;
+    rateLimit: Schema.Attribute.BigInteger &
+      Schema.Attribute.SetMinMax<
+        {
+          min: '0';
+        },
+        string
+      >;
+    retryPolicy: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 20;
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<5>;
+    systemName: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    timeout: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiOutboundRequestOutboundRequest
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'outbound_requests';
+  info: {
+    displayName: 'Outbound Request';
+    pluralName: 'outbound-requests';
+    singularName: 'outbound-request';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    firstAttemptAt: Schema.Attribute.DateTime;
+    lastAttemptAt: Schema.Attribute.DateTime;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::outbound-request.outbound-request'
+    > &
+      Schema.Attribute.Private;
+    payload: Schema.Attribute.Text;
+    publishedAt: Schema.Attribute.DateTime;
+    requestHeader: Schema.Attribute.Text;
+    responseMessage: Schema.Attribute.Text;
+    responseStatus: Schema.Attribute.Enumeration<['success', 'failed']>;
+    responStatusCode: Schema.Attribute.String;
+    retryAttempts: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -1110,6 +1265,9 @@ declare module '@strapi/strapi' {
       'api::author.author': ApiAuthorAuthor;
       'api::category.category': ApiCategoryCategory;
       'api::global.global': ApiGlobalGlobal;
+      'api::inbound-request.inbound-request': ApiInboundRequestInboundRequest;
+      'api::integration-endpoint.integration-endpoint': ApiIntegrationEndpointIntegrationEndpoint;
+      'api::outbound-request.outbound-request': ApiOutboundRequestOutboundRequest;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
