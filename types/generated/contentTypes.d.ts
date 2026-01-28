@@ -620,6 +620,10 @@ export interface ApiInboundRequestInboundRequest
       'api::inbound-request.inbound-request'
     > &
       Schema.Attribute.Private;
+    organizationRequester: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::organization.organization'
+    >;
     payload: Schema.Attribute.Text;
     payloadFilePath: Schema.Attribute.String;
     processedAt: Schema.Attribute.DateTime;
@@ -694,6 +698,10 @@ export interface ApiIntegrationEndpointIntegrationEndpoint
     systemName: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
+    systemOwner: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::organization.organization'
+    >;
     timeout: Schema.Attribute.Integer &
       Schema.Attribute.SetMinMax<
         {
@@ -701,6 +709,45 @@ export interface ApiIntegrationEndpointIntegrationEndpoint
         },
         number
       >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiOrganizationOrganization
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'organizations';
+  info: {
+    displayName: 'Organization';
+    pluralName: 'organizations';
+    singularName: 'organization';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    inboundRequests: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::inbound-request.inbound-request'
+    >;
+    integrationEndpoints: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::integration-endpoint.integration-endpoint'
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::organization.organization'
+    > &
+      Schema.Attribute.Private;
+    organizationName: Schema.Attribute.String & Schema.Attribute.Required;
+    organizationSlug: Schema.Attribute.String & Schema.Attribute.Unique;
+    prismaTenant: Schema.Attribute.Enumeration<['id', 'ms', 'th']>;
+    publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1267,6 +1314,7 @@ declare module '@strapi/strapi' {
       'api::global.global': ApiGlobalGlobal;
       'api::inbound-request.inbound-request': ApiInboundRequestInboundRequest;
       'api::integration-endpoint.integration-endpoint': ApiIntegrationEndpointIntegrationEndpoint;
+      'api::organization.organization': ApiOrganizationOrganization;
       'api::outbound-request.outbound-request': ApiOutboundRequestOutboundRequest;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

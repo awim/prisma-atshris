@@ -40,6 +40,12 @@
         "failedSubmitted",
         "aborted"
       ]
+    },
+    "organizationRequester": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization",
+      "inversedBy": "inboundRequests"
     }
   }
 }

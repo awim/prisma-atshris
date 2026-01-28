@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "organizations",
+  "info": {
+    "singularName": "organization",
+    "pluralName": "organizations",
+    "displayName": "Organization"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "organizationName": {
+      "type": "string",
+      "required": true
+    },
+    "organizationSlug": {
+      "type": "string",
+      "unique": true,
+      "regex": "[a-z\\-]"
+    },
+    "prismaTenant": {
+      "type": "enumeration",
+      "enum": [
+        "id",
+        "ms",
+        "th"
+      ]
+    },
+    "integrationEndpoints": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::integration-endpoint.integration-endpoint",
+      "mappedBy": "systemOwner"
+    },
+    "inboundRequests": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::inbound-request.inbound-request",
+      "mappedBy": "organizationRequester"
+    }
+  }
+}
