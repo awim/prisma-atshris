@@ -39,6 +39,12 @@
       "relation": "oneToMany",
       "target": "api::inbound-request.inbound-request",
       "mappedBy": "organizationRequester"
+    },
+    "devTokens": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::dev-token.dev-token",
+      "mappedBy": "organization"
     }
   }
 }

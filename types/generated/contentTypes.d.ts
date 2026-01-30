@@ -563,6 +563,56 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiDevTokenDevToken extends Struct.CollectionTypeSchema {
+  collectionName: 'dev_tokens';
+  info: {
+    displayName: 'Development Token';
+    pluralName: 'dev-tokens';
+    singularName: 'dev-token';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    dueDate: Schema.Attribute.Date;
+    initQuota: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 99999;
+        },
+        number
+      >;
+    isActive: Schema.Attribute.Boolean;
+    leftQuota: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 99999;
+          min: 0;
+        },
+        number
+      >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::dev-token.dev-token'
+    > &
+      Schema.Attribute.Private;
+    organization: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::organization.organization'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    tokenId: Schema.Attribute.UID<''>;
+    tokenName: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
   collectionName: 'globals';
   info: {
@@ -730,6 +780,10 @@ export interface ApiOrganizationOrganization
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    devTokens: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::dev-token.dev-token'
+    >;
     inboundRequests: Schema.Attribute.Relation<
       'oneToMany',
       'api::inbound-request.inbound-request'
@@ -1311,6 +1365,7 @@ declare module '@strapi/strapi' {
       'api::article.article': ApiArticleArticle;
       'api::author.author': ApiAuthorAuthor;
       'api::category.category': ApiCategoryCategory;
+      'api::dev-token.dev-token': ApiDevTokenDevToken;
       'api::global.global': ApiGlobalGlobal;
       'api::inbound-request.inbound-request': ApiInboundRequestInboundRequest;
       'api::integration-endpoint.integration-endpoint': ApiIntegrationEndpointIntegrationEndpoint;
